@@ -52,6 +52,12 @@
         <appender-ref ref="DEBUG_APPENDER_CHADOSKYX_CLI" />
     </logger>
 
+    <logger name="cl.chadoskyx.titulo">
+        <level value="DEBUG" />
+        <appender-ref ref="INFO_APPENDER_CHADOSKYX_CLI" />
+        <appender-ref ref="ERROR_APPENDER_CHADOSKYX_CLI" />
+        <appender-ref ref="DEBUG_APPENDER_CHADOSKYX_CLI" />
+    </logger>
 
     <root>
         <!-- Debería cambiarse por FATAL en producción. -->
