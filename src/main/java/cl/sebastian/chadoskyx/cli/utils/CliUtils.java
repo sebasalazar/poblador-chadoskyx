@@ -1,4 +1,4 @@
-package cl.sebastian.chadoskyx.cli;
+package cl.sebastian.chadoskyx.cli.utils;
 
 import java.io.Serializable;
 import java.util.Calendar;

@@ -30,8 +30,9 @@
         </property>
     </bean>
 
+    <!--<tx:annotation-driven />-->
     <context:annotation-config />
     <context:component-scan base-package="cl.sebastian.chadoskyx.cli" />
-    <context:component-scan base-package="cl.chadoskyx" />
+    <!--<context:component-scan base-package="cl.chadoskyx" />-->
 
 </beans>
