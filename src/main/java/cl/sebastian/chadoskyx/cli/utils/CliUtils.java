@@ -55,4 +55,28 @@ public class CliUtils implements Serializable {
         }
         return ok;
     }
+
+    public static Integer rutAlAzar() {
+        return RandomUtils.nextInt(10000000, 20000000);
+    }
+
+    public static Date crearFecha(int anio, int mes, int dia) {
+        Date fecha = new Date();
+        try {
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(fecha);
+            calendar.set(Calendar.YEAR, anio);
+            calendar.set(Calendar.MONTH, mes - 1);
+            calendar.set(Calendar.DATE, dia);
+            calendar.set(Calendar.HOUR_OF_DAY, RandomUtils.nextInt(8, 20));
+            calendar.set(Calendar.MINUTE, RandomUtils.nextInt(0, 59));
+            calendar.set(Calendar.SECOND, RandomUtils.nextInt(0, 59));
+            calendar.set(Calendar.MILLISECOND, RandomUtils.nextInt(0, 999));
+            fecha = calendar.getTime();
+        } catch (Exception e) {
+            fecha = null;
+            logger.error("Error al obtener fecha: {}", e.toString());
+        }
+        return fecha;
+    }
 }

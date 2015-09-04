@@ -21,10 +21,16 @@ import cl.sebastian.chadoskyx.cli.servicio.ServicioCli;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.sql.DataSource;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -51,7 +57,28 @@ public class ServicioCliImpl implements ServicioCli, Serializable {
     ServicioUsuario servicioUsuario;
     @Resource(name = "servicioVeterinaria")
     ServicioVeterinaria servicioVeterinaria;
+    @Resource(name = "dataSource")
+    private DataSource dataSource;
+    private SessionFactory sessionFactory = null;
     private final static Logger logger = LoggerFactory.getLogger(ServicioCliImpl.class);
+
+    private void crearSession() {
+        if (sessionFactory.isClosed()) {
+            LocalSessionFactoryBuilder factory = new LocalSessionFactoryBuilder(dataSource);
+            sessionFactory = factory.buildSessionFactory();
+        }
+    }
+
+    @PostConstruct
+    public void iniciar() {
+        try {
+            LocalSessionFactoryBuilder factory = new LocalSessionFactoryBuilder(dataSource);
+            sessionFactory = factory.buildSessionFactory();
+        } catch (Exception e) {
+            logger.error("Error al iniciar: {}", e.toString());
+            logger.debug("Error al iniciar: {}", e.toString(), e);
+        }
+    }
 
     @Override
     public Sucursal consultarSucursal(Integer id) {
@@ -131,7 +158,11 @@ public class ServicioCliImpl implements ServicioCli, Serializable {
         Ficha resultado = null;
         try {
             if (ficha != null) {
+                crearSession();
                 resultado = servicioAtencion.guardar(ficha);
+
+//                Session currentSession = sessionFactory.getCurrentSession();
+//                resultado = (Ficha) currentSession.save(ficha);
             }
         } catch (Exception e) {
             resultado = null;
@@ -146,7 +177,11 @@ public class ServicioCliImpl implements ServicioCli, Serializable {
         Atencion resultado = null;
         try {
             if (atencion != null) {
+                crearSession();
                 resultado = servicioAtencion.guardar(atencion);
+
+//                Session currentSession = sessionFactory.getCurrentSession();
+//                resultado = (Atencion) currentSession.save(atencion);
             }
         } catch (Exception e) {
             resultado = null;

@@ -59,11 +59,12 @@ public class App implements Serializable {
             // Ciclo de Atenciones
             for (int d = 1; d <= 31; d++) {
                 for (int m = 1; m <= 12; m++) {
-                    Date fecha = FechaUtils.crearFecha(2015, m, d);
-                    if (fecha != null) {
-                        if (!CliUtils.esDomingo(fecha)) {
-                            int numero = RandomUtils.nextInt(0, 7);
-                            for (int i = 0; i < numero; i++) {
+                    int numero = RandomUtils.nextInt(1, 7);
+                    for (int i = 0; i < numero; i++) {
+                        Date fecha = CliUtils.crearFecha(2015, m, d);
+                        if (fecha != null) {
+                            if (!CliUtils.esDomingo(fecha)) {
+
                                 Categoria categoria = CliUtils.obtenerAlAzar(categorias);
                                 if (categoria != null) {
 
@@ -72,7 +73,7 @@ public class App implements Serializable {
                                     atencion.setFecha(fecha);
                                     atencion.setPaciente(paciente);
                                     atencion.setPrecio(categoria.getPrecio());
-                                    atencion.setRutProfesional(12345678);
+                                    atencion.setRutProfesional(CliUtils.rutAlAzar());
                                     atencion.setSucursal(sucursal);
 
                                     if (StringUtils.containsIgnoreCase(categoria.getNombre(), "médica")) {
