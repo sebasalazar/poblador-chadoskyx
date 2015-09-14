@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cl.sebastian.chadoskyx.cli.servicio;
 
 import cl.chadoskyx.titulo.modelo.Atencion;
@@ -34,4 +29,6 @@ public interface ServicioCli {
     public Ficha guardar(Ficha ficha);
 
     public Atencion guardar(Atencion atencion);
+    
+    public Diagnostico consultarDiagnostico(Long id);
 }

@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -53,6 +52,7 @@ public class App implements Serializable {
             Paciente paciente = servicio.consultarPaciente(1L);
             List<Categoria> categorias = servicio.consultarCategorias(sucursal.getVeterinaria());
             List<Diagnostico> diagnosticos = servicio.consultarDiagnosticos();
+            Diagnostico consultaMedica = servicio.consultarDiagnostico(1L);
 
             consola.println(String.format("Cargando datos para la veterinaria '%s'", sucursal.getVeterinaria().getRazonSocial()));
 
@@ -65,29 +65,24 @@ public class App implements Serializable {
                         if (fecha != null) {
                             if (!CliUtils.esDomingo(fecha)) {
 
-                                Categoria categoria = CliUtils.obtenerAlAzar(categorias);
-                                if (categoria != null) {
+                                if (consultaMedica != null) {
 
                                     Atencion atencion = new Atencion();
-                                    atencion.setCategoria(categoria);
+                                    atencion.setDiagnostico(consultaMedica);
                                     atencion.setFecha(fecha);
                                     atencion.setPaciente(paciente);
-                                    atencion.setPrecio(categoria.getPrecio());
-                                    atencion.setRutProfesional(CliUtils.rutAlAzar());
+                                    atencion.setPrecio(consultaMedica.getEspecialidad().getPrecio());
+                                    atencion.setMedico(medico);
                                     atencion.setSucursal(sucursal);
 
-                                    if (StringUtils.containsIgnoreCase(categoria.getNombre(), "médica")) {
-                                        Ficha ficha = new Ficha();
-                                        ficha.setDiagnostico(CliUtils.obtenerAlAzar(diagnosticos));
-                                        ficha.setFecha(fecha);
-                                        ficha.setMedico(medico);
-                                        ficha.setPaciente(paciente);
-                                        Ficha fichaGuardada = servicio.guardar(ficha);
-                                        if (fichaGuardada != null) {
-                                            consola.println(String.format("Ficha %d guardada", ficha.getId()));
-                                        }
-
-                                        atencion.setRutProfesional(medico.getRut());
+                                    Ficha ficha = new Ficha();
+                                    ficha.setDiagnostico(CliUtils.obtenerAlAzar(diagnosticos));
+                                    ficha.setFecha(fecha);
+                                    ficha.setMedico(medico);
+                                    ficha.setPaciente(paciente);
+                                    Ficha fichaGuardada = servicio.guardar(ficha);
+                                    if (fichaGuardada != null) {
+                                        consola.println(String.format("Ficha %d guardada", ficha.getId()));
                                     }
 
                                     Atencion atencionGuardada = servicio.guardar(atencion);

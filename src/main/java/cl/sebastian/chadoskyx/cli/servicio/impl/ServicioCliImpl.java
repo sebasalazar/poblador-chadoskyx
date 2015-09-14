@@ -24,13 +24,11 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -189,6 +187,22 @@ public class ServicioCliImpl implements ServicioCli, Serializable {
             logger.debug("Error al guardar atencion: {}", e.toString(), e);
         }
         return resultado;
+    }
+
+    @Override
+    public Diagnostico consultarDiagnostico(Long id) {
+        Diagnostico diagnostico = null;
+        try {
+            if (id != null) {
+                crearSession();
+                diagnostico = servicioDiagnostico.consultarDiagnostico(id);
+            }
+        } catch (Exception e) {
+            diagnostico = null;
+            logger.error("Error al obtener diagnostico: {}", e.toString());
+            logger.debug("Error al obtener diagnostico: {}", e.toString(), e);
+        }
+        return diagnostico;
     }
 
 }
